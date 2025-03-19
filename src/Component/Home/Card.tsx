@@ -1,11 +1,15 @@
 import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
 
-export default function () {
+const Cart = () => {
   return (
     
     <div className="card bg-gray-100  shadow-sm p-2">
     <figure>
-      <img
+      <Image
+      className="w-full"
+      width={1000}
+      height={1000}
         src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
         alt="Shoes" />
     </figure>
@@ -20,3 +24,5 @@ export default function () {
   </div>
   )
 }
+
+export default Cart

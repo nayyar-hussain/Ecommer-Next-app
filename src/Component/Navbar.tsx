@@ -1,5 +1,5 @@
 "use client"
-import { SignIn, useClerk, UserButton } from "@clerk/nextjs"
+import {  useClerk, UserButton } from "@clerk/nextjs"
 import Container from "./Container"
 import { useAppContext } from "@/store/context"
 
@@ -40,7 +40,7 @@ function Navbar() {
     {user ? (
         // If the user is authenticated, display their information
         <div>
-          <UserButton></UserButton>
+          <UserButton/>
         </div>
       ) : (
         // If the user is not authenticated, show a sign-in button
