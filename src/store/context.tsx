@@ -1,5 +1,5 @@
 "use client"
-import { UserButton, useUser } from "@clerk/nextjs";
+import {  useUser } from "@clerk/nextjs";
 import { createContext, ReactNode, useContext } from "react";
 
 // Define the type for the context value
