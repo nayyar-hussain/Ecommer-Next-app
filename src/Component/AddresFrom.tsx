@@ -40,6 +40,7 @@ function AddresFrom() {
            
            
         } catch (error) {
+            console.log(error);
             
         }
     }
