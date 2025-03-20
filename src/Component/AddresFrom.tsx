@@ -35,6 +35,9 @@ function AddresFrom() {
             city,
             
            }
+
+           console.log(payload);
+           
            
         } catch (error) {
             
