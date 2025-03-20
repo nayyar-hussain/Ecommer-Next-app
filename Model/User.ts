@@ -1,7 +1,7 @@
-import mongoose, { Model, model, models, Schema } from "mongoose";
+import { Model, model, models, Schema } from "mongoose";
 
 interface IUser extends  Document {
-    _id? : mongoose.Types.ObjectId,
+    _id? : String,
     name : string,
     email : string,
     imageUrl : string,
@@ -9,6 +9,7 @@ interface IUser extends  Document {
 }
 
 const userSchema  = new Schema<IUser>({
+    _id : {type : String , required : true},
     name : {type : String , required : true},
     email : {type : String , required : true , unique : true},
     imageUrl : {type : String , required : true},
