@@ -2,8 +2,12 @@
 import {  useClerk, UserButton } from "@clerk/nextjs"
 import Container from "./Container"
 import { useAppContext } from "@/store/context"
+import { useRouter } from "next/navigation"
+
 
 function Navbar() {
+
+  const router = useRouter()
 
   const {openSignIn} = useClerk()
   const { user } = useAppContext()
@@ -13,7 +17,7 @@ function Navbar() {
         
     <header className="navbar shadow-y shadow-sm ">
   <div className="flex-1">
-    <h1 className=" btn-ghost text-xl">Store</h1>
+    <h1 className=" btn-ghost text-xl cursor-pointer" onClick={() => router.push('/')}>Store</h1>
   </div>
   <div className="flex items-center gap-1 ">
     <div className="dropdown dropdown-end mx-2">
@@ -31,7 +35,7 @@ function Navbar() {
           <span className="text-lg font-bold">8 Items</span>
           <span className="text-info">Subtotal: $999</span>
           <div className="card-actions">
-            <button className="btn btn-primary btn-block">View cart</button>
+            <button onClick={() => router.push('/product/ViewCard')} className="btn btn-primary btn-block">View cart</button>
           </div>
         </div>
       </div>
