@@ -1,14 +1,18 @@
 "use client"
+import { useAppContext } from '@/store/context'
+import axios from 'axios'
 import React from 'react'
 
 function AddresFrom() {
 
-    const handleAddressForm = (formdata: FormData) => {
+    const {cartItems , userId} = useAppContext()
+
+    const handleAddressForm = async (formdata: FormData) => {
         
         try {
             const name = formdata.get('name') as string
             const email = formdata.get('email') as string
-            const address = formdata.get('address') as string
+            const street = formdata.get('street') as string
             const phone = formdata.get('phone') as string
             const zipcode = formdata.get('zipcode') as string
             const state = formdata.get('state') as string
@@ -17,17 +21,17 @@ function AddresFrom() {
             interface IFormData {
             name : string
             email : string
-            address : string,
+            street : string,
             phone : string,
             zipcode : string,
             state : string,
             country : string
             city : string
             }
-           const payload : IFormData = {
+           const useraddress : IFormData = {
             name,
             email,
-            address,
+            street,
             phone,
             zipcode,
             state,
@@ -36,8 +40,13 @@ function AddresFrom() {
             
            }
 
-           console.log(payload);
+         const {data} = await axios.post('/api/order',{
+            cartItems,
+            useraddress,
+            userId
+         })
            
+           console.log(data);
            
         } catch (error) {
             console.log(error);
@@ -57,8 +66,8 @@ function AddresFrom() {
             </div>
 
             <div>
-                <label className="fieldset-label">Address</label>
-                <textarea name='address' className="textarea w-full" placeholder="Address"></textarea>
+                <label className="fieldset-label">Street</label>
+                <textarea name='street' className="textarea w-full" placeholder="Address"></textarea>
             </div>
 
             {/* Grid Container for 2 Columns (Baaki Fields) */}

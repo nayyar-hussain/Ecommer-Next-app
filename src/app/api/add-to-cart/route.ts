@@ -1,0 +1,45 @@
+import { NextRequest, NextResponse } from "next/server";
+import { ConnectToDatabase } from "../../../../config/Database";
+import Cart from "../../../../Model/AddToCard";
+
+export async function POST(req: NextRequest) {
+  try {
+    const { productId, userId, quantity } = await req.json();
+
+    if (!productId || !userId) {
+      return NextResponse.json({ msg: "Product or user not found" }, { status: 400 });
+    }
+
+    if (typeof quantity !== "number" || quantity < 1) {
+      return NextResponse.json({ msg: "Invalid quantity" }, { status: 400 });
+    }
+
+    await ConnectToDatabase();
+
+    let cartItem = await Cart.findOne({ userId, productId });
+    if (cartItem) {
+      cartItem.quantity += quantity;
+      await cartItem.save();
+      return NextResponse.json(
+        { message: "Product updated cart", },
+        { status: 201 }
+      );
+    } else {
+      const newCartItem = new Cart({ userId, productId, quantity });
+      await newCartItem.save();
+
+      return NextResponse.json(
+        { message: "Product added to cart", },
+        { status: 201 }
+      );
+    }
+  } catch (error: any) {
+    console.error("Server error:", error);
+    return NextResponse.json(
+      { message: "Server error", error: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+

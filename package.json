@@ -6,10 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-   "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.5",
+    "axios": "^1.8.4",
+    "cloudinary": "^2.6.0",
     "daisyui": "^5.0.6",
     "inngest": "^3.32.9",
     "lucide-react": "^0.483.0",
