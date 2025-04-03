@@ -8,12 +8,11 @@ interface ApiResponse {
   products: IProduct[];
 }
 
-async function ProductDetail({ params }: { params: { id: string } }) { // Adjusted to Next.js params
+async function ProductDetail({ params }: { params: { id: string } }) { 
   const { id } = params; // Extract pId from params
 
   try {
-    // Log the incoming pId for debugging
-    console.log('Received pId from params:', id);
+    
 
     const res = await axios.get<ApiResponse>('http://localhost:3000/api/product/add', {
       headers: {
@@ -21,18 +20,13 @@ async function ProductDetail({ params }: { params: { id: string } }) { // Adjust
       },
     });
 
-    // Log the full API response
-    console.log('API Response:', res.data);
 
     const products = res.data.products || [];
     
-    // Log the products array
-    console.log('Products Array:', products);
-
-    // Find the product matching pId with prod._id
+  
     const detail = products.find((prod) => {
       const match = prod._id === id;
-      console.log(`Comparing prod._id: ${prod._id} with pId: ${id} - Match: ${match}`);
+     
       return match;
     });
 
@@ -87,6 +81,7 @@ async function ProductDetail({ params }: { params: { id: string } }) { // Adjust
         <div className="my-10">
           <h1 className="text-3xl font-semibold my-10">Error</h1>
           <p className="text-red-500">Failed to load product details</p>
+          
         </div>
       </Container>
     );

@@ -4,7 +4,7 @@ import Cart from "../../../../Model/AddToCard";
 
 export async function POST(req: NextRequest) {
   try {
-    const { productId, userId, quantity } = await req.json();
+    const { productId, userId, quantity, quantityCal } = await req.json();
 
     if (!productId || !userId) {
       return NextResponse.json({ msg: "Product or user not found" }, { status: 400 });
@@ -18,7 +18,15 @@ export async function POST(req: NextRequest) {
 
     let cartItem = await Cart.findOne({ userId, productId });
     if (cartItem) {
-      cartItem.quantity += quantity;
+      if(quantityCal === "increment") {
+
+        cartItem.quantity += quantity;
+      } else if(quantityCal === "decrement") {
+        cartItem.quantity -= quantity;
+      }
+      if (cartItem.quantity < 1) {
+        cartItem.quantity = 1; // Ensure quantity doesn't go below 1
+      }
       await cartItem.save();
       return NextResponse.json(
         { message: "Product updated cart", },

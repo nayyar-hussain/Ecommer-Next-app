@@ -1,15 +1,52 @@
-
-import React from 'react';
-import { ApiResponse } from '@/Component/Home/Producs';
+"use client"
+import React, { useEffect, useState } from 'react';
+import {  IProduct } from '@/Component/Home/Producs';
 import axios from 'axios';
 
-// interface ApiResponse {
-//   products : IProduct[]
+interface ApiResponse {
+  products : IProduct[]
+}
+
+// interface IProduct {
+//   _id? : string
+//   name : string,
+//   description : string,
+//   imageUrl : string,
+//   price : string,
+//   createAt : string
 // }
 
- export const ViewProducts = async () => {
-  const res = await axios.get<ApiResponse>('http://localhost:3000/api/product/add')
-  const products = res.data.products
+ export const ViewProducts =  () => {
+
+  const [products, setproducts] = useState<IProduct[]>([])
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get<ApiResponse>('http://localhost:3000/api/product/add');
+      setproducts(res.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  useEffect(() => {
+   fetchProducts()
+  }, [])
+
+
+  const deleteroducts = async (id : string) => {
+    try {
+      const {data} = await axios.delete(`http://localhost:3000/api/product/add?id=${id}`);
+      console.log(data);
+      
+     if(data.success == 200){
+      fetchProducts()
+     }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -41,7 +78,7 @@ import axios from 'axios';
 
               {/* Delete Button */}
               <button
-              
+              onClick={() => product._id && deleteroducts(product._id)}
                 className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
               >
                 Delete

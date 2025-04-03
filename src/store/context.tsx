@@ -25,6 +25,8 @@ interface AppContextValue {
   loading: boolean;
   cartItems: CartItem[];
   totalPrice: number;
+  quantityCal: string;
+  setquantityCal: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface AddToCart {
@@ -55,6 +57,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const { userId, isLoaded } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [quantityCal, setquantityCal] = useState<string>("increment")
 
   const handleAddToCart = async ({ pId }: AddToCart): Promise<void> => {
     if (!isLoaded) {
@@ -72,6 +75,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         {
           productId: pId,
           userId,
+          quantityCal,
           quantity: 1,
         },
         {
@@ -93,6 +97,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   handleAddToCart();
+  // }, [quantityCal])
+  
   const fetchCart = async (): Promise<void> => {
     if (!isLoaded) {
       // Don't alert here since it's called on mount
@@ -131,7 +139,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   }, 0);
 
     
-
+  
   const value: AppContextValue = {
     user,
     userId,
@@ -140,6 +148,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     loading,
     cartItems,
     totalPrice,
+    quantityCal, setquantityCal
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

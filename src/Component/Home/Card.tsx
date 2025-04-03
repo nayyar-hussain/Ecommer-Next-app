@@ -7,7 +7,7 @@ import { useAppContext } from "@/store/context";
 
 const Card = ({ pId, name, description, price, imageUrl }: IProduct) => {
   const router = useRouter();
-  const { handleAddToCart } = useAppContext();
+  const { handleAddToCart, setquantityCal } = useAppContext();
 
   return (
     <div className="card bg-gray-100 shadow-sm">
@@ -38,6 +38,7 @@ const Card = ({ pId, name, description, price, imageUrl }: IProduct) => {
               } else {
                 alert("Product ID is missing");
               }
+              setquantityCal("increment");
             }}
             className="btn btn-primary"
           >

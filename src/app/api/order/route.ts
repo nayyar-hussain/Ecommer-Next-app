@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../config/Database";
 import Order from "../../../../Model/Order";
+import Cart from "../../../../Model/AddToCard";
 
 export async function POST(req: NextRequest) {
     try {
@@ -14,11 +15,15 @@ export async function POST(req: NextRequest) {
 
         }
 
-       new Order({
+      const newOrder =  new Order({
             userId,
             cartItems,
             address : useraddress
         })
+
+        await newOrder.save()
+
+        
 
 
       
@@ -47,3 +52,7 @@ export async function GET(req:NextRequest) {
         return NextResponse.json({ status  : 500 ,error : error.message})
     }
 }
+
+
+// user track order
+

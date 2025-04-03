@@ -5,7 +5,7 @@ import { useAppContext } from "@/store/context";
 
 function ViewCart() {
    
-  const { loading , cartItems , totalPrice}  = useAppContext()
+  const { loading , cartItems , totalPrice   , setquantityCal}  = useAppContext()
 
   if (loading) {
     return (
@@ -44,9 +44,9 @@ function ViewCart() {
                   ${item.productId.price}
                 </h2>
                 <div className="flex gap-6 text-[18px] items-center bg-white w-[120px] rounded justify-center shadow-2xl cursor-pointer">
-                  <button>+</button>
+                  <button onClick={() => setquantityCal("increment")}>+</button>
                   <h2>{item.quantity}</h2>
-                  <button>-</button>
+                  <button onClick={() => setquantityCal("decrement")}>-</button>
                 </div>
                 <button className="btn btn-soft btn-error">Remove Item</button>
               </div>

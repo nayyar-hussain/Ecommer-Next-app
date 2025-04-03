@@ -74,12 +74,16 @@ export async function GET(req:NextRequest) {
 export async function DELETE(req : NextRequest){
   try {
     const id = req.nextUrl.searchParams.get('id')
+    console.log(id);
+    
     if(!id){
       return NextResponse.json({success : 400 , msg : "id not found"})
 
     }
-
+    
     await Product.findByIdAndDelete(id)
+    return NextResponse.json({success : 200 , msg : "Item deleted"})
+
   } catch (error) {
     return NextResponse.json({success : 500 , error})
   }

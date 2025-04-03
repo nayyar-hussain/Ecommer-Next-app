@@ -1,19 +1,63 @@
+"use client";
 import Container from '@/Component/Container';
-import React from 'react'
+import { useAppContext } from '@/store/context';
+import React, { useEffect, useState } from 'react'
 
 function ViewOrderOfUser() {
+
+  interface CartItem {
+    _id: string;
+    productId: {  
+      _id: string;
+      name: string;
+      price: number;
+    }
+    quantity: number;
+  }
+
+  interface Order {
+    _id: string;
+    userId: string;
+    cartItems: CartItem[];
+    status: string;
+    createdAt: string;
+  }
  
-  // Sample orders data
-  const orders = [
-    {
-      id: 1,
-      customerName: 'John Doe',
-      date: '2023-10-15',
-      status: 'Delivered',
-      total: '$120.00',
-    },
+
+  const {userId , isLoaded} = useAppContext()
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  const fetchUserOrders = async () => {
+    try {
+
+      if(!isLoaded) {
+        return <div>Loading...</div>; // Handle loading state as needed
+      }
+      if(!userId) {
+        return <div>User not found</div>; // Handle user not found state as needed
+      }
+
+      const response = await fetch(`/api/user?userid=${userId}`); // Replace with actual user ID
+      if (!response.ok) {
+        throw new Error('Failed to fetch orders');
+      }
+      const data = await response.json();
+      setOrders(data.orderData); // Assuming orderData is the correct field in the response
+      console.log(data); // Handle the fetched order data as needed
+    } catch (error) {
+      console.error(error);
+    }
+  }
+    useEffect(() => {
+      fetchUserOrders(); // Fetch orders when the component mounts
+    }, []); // Add userId as a dependency to refetch when it changes
+   
+    
  
-  ];
+  
+ 
+ 
+  
 
   return (
     <Container>
@@ -29,9 +73,7 @@ function ViewOrderOfUser() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Order ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Customer Name
-              </th>
+             
              
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
@@ -39,23 +81,19 @@ function ViewOrderOfUser() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Total
-              </th>
+             
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {orders.map((order) => (
-              <tr key={order.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={order._id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  #{order.id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.customerName}
+                  #{order._id}
                 </td>
                
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.date}
+                  {new Date(order.createdAt).toLocaleDateString()} {/* Format date as needed */}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
@@ -72,9 +110,7 @@ function ViewOrderOfUser() {
                     {order.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {order.total}
-                </td>
+               
               </tr>
             ))}
           </tbody>
