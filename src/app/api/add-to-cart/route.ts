@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     await ConnectToDatabase();
 
-    let cartItem = await Cart.findOne({ userId, productId });
+    const cartItem = await Cart.findOne({ userId, productId });
     if (cartItem) {
       if(quantityCal === "increment") {
 
@@ -41,10 +41,10 @@ export async function POST(req: NextRequest) {
         { status: 201 }
       );
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json(
-      { message: "Server error", error: error.message },
+      { message: "Server error", error: error },
       { status: 500 }
     );
   }
