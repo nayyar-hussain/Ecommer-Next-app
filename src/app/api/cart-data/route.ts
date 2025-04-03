@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       { message: "Cart retrieved successfully",  userCartData }, // Renamed userCartData to data
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     // Log the error for debugging
     console.error("Server error in GET /api/cart:", error);
 
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         message: "Server error",
-        error: error.message || "Unknown error",
+        error: error || "Unknown error",
       },
       { status: 500 }
     );

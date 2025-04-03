@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../config/Database";
 import Order from "../../../../Model/Order";
-import Cart from "../../../../Model/AddToCard";
 
 export async function POST(req: NextRequest) {
     try {
@@ -28,12 +27,12 @@ export async function POST(req: NextRequest) {
 
       
         return NextResponse.json({status : 200 , msg : "Order Placed"})
-    } catch (error : any) {
-        return NextResponse.json({ status  : 500 ,error : error.message})
+    } catch (error) {
+        return NextResponse.json({ status  : 500 ,error : error})
     }
 }
 
-export async function GET(req:NextRequest) {
+export async function GET() {
     try {
         await ConnectToDatabase()
 
@@ -48,8 +47,8 @@ export async function GET(req:NextRequest) {
             return NextResponse.json({ status  : 200 , orderData})
 
         }
-            } catch (error : any) {
-        return NextResponse.json({ status  : 500 ,error : error.message})
+            } catch (error ) {
+        return NextResponse.json({ status  : 500 ,error : error})
     }
 }
 

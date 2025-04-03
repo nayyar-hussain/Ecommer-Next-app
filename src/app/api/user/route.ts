@@ -23,6 +23,6 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ status  : 400 , msg : "No Order Found"})
         }
     } catch (error) {
-        return NextResponse.json({ status  : 500 ,error : "Internal Server Error"})
+        return NextResponse.json({ status  : 500 ,error })
     }
 }
