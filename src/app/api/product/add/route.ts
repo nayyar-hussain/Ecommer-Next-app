@@ -2,7 +2,6 @@ import { ConnectToDatabase } from "../../../../../config/Database";
 import { NextRequest, NextResponse } from 'next/server';
 import { cloudinary } from "../../../../../lib/cloudinary";
 import Product from "../../../../../Model/Product";
-import { v2 as cloudinaryV2 } from 'cloudinary'; // Import the specific v2 type if you're using v2
 
 // Define Cloudinary upload result type based on actual Cloudinary response
 interface CloudinaryUploadResult {
