@@ -1,52 +1,51 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import {  IProduct } from '@/Component/Home/Producs';
-import axios from 'axios';
+"use client";
+import React, { useEffect, useState } from "react";
+import { IProduct } from "@/Component/Home/Producs"; // Fix typo in path if needed
+import axios from "axios";
 
 interface ApiResponse {
-  products : IProduct[]
+  products: IProduct[];
 }
 
+// Uncomment and use this interface if it's not already defined in '@/Component/Home/Producs'
 // interface IProduct {
-//   _id? : string
-//   name : string,
-//   description : string,
-//   imageUrl : string,
-//   price : string,
-//   createAt : string
+//   _id?: string;
+//   name: string;
+//   description: string;
+//   imageUrl: string;
+//   price: string;
+//   createAt: string;
 // }
 
- export const ViewProducts =  () => {
+const ViewProducts = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
 
-  const [products, setproducts] = useState<IProduct[]>([])
   const fetchProducts = async () => {
     try {
-      const res = await axios.get<ApiResponse>('http://localhost:3000/api/product/add');
-      setproducts(res.data.products);
+      const res = await axios.get<ApiResponse>("http://localhost:3000/api/product/add");
+      setProducts(res.data.products);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     }
   };
 
   useEffect(() => {
-   fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
-
-  const deleteroducts = async (id : string) => {
+  const deleteProduct = async (id: string) => {
     try {
-      const {data} = await axios.delete(`http://localhost:3000/api/product/add?id=${id}`);
+      const { data } = await axios.delete(`http://localhost:3000/api/product/add?id=${id}`);
       console.log(data);
       
-     if(data.success == 200){
-      fetchProducts()
-     }
+      // Note: Your API returns success: true/false, not 200
+      if (data.success) {  // Changed from data.success == 200
+        fetchProducts();
+      }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error deleting product:", error);
     }
   };
-
-  
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -71,14 +70,16 @@ interface ApiResponse {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
                 {product.name}
               </h2>
-              <p className="text-sm text-gray-600 mb-4">{product.description.slice(0,100)} <b>...</b> </p>
+              <p className="text-sm text-gray-600 mb-4">
+                {product.description.slice(0, 100)} <b>...</b>
+              </p>
               <p className="text-lg font-bold text-gray-900 mb-4">
-               ${product.price}
+                ${product.price}
               </p>
 
               {/* Delete Button */}
               <button
-              onClick={() => product._id && deleteroducts(product._id)}
+                onClick={() => product._id && deleteProduct(product._id)}
                 className="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition-colors"
               >
                 Delete
@@ -91,4 +92,5 @@ interface ApiResponse {
   );
 };
 
+// Export as default for Next.js page
 export default ViewProducts;
