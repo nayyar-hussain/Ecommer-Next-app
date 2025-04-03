@@ -2,11 +2,21 @@ import { ConnectToDatabase } from "../../../../../config/Database";
 import { NextRequest, NextResponse } from 'next/server';
 import { cloudinary } from "../../../../../lib/cloudinary";
 import Product from "../../../../../Model/Product";
+import { v2 as cloudinaryV2 } from 'cloudinary'; // Import the specific v2 type if you're using v2
 
-// Define the expected Cloudinary upload result type
+// Define Cloudinary upload result type based on actual Cloudinary response
 interface CloudinaryUploadResult {
   secure_url: string;
-  [key: string]: any; // For other potential Cloudinary response properties
+  public_id: string;
+  // Make other fields optional since they might not always be present
+  asset_id?: string;
+  original_filename?: string;
+  format?: string;
+  resource_type?: string;
+  created_at?: string;
+  bytes?: number;
+  width?: number;
+  height?: number;
 }
 
 export async function POST(req: NextRequest) {
@@ -42,7 +52,23 @@ export async function POST(req: NextRequest) {
         { folder: 'products' },
         (error, result) => {
           if (error) reject(error);
-          else resolve(result as CloudinaryUploadResult);
+          // Safely handle the result, which might be undefined
+          else if (result) {
+            resolve({
+              secure_url: result.secure_url,
+              public_id: result.public_id,
+              asset_id: result.asset_id,
+              original_filename: result.original_filename,
+              format: result.format,
+              resource_type: result.resource_type,
+              created_at: result.created_at,
+              bytes: result.bytes,
+              width: result.width,
+              height: result.height
+            });
+          } else {
+            reject(new Error('Upload result is undefined'));
+          }
         }
       ).end(buffer);
     });
@@ -69,9 +95,9 @@ export async function GET() {
   try {
     await ConnectToDatabase();
     const products = await Product.find({});
-    return NextResponse.json({ success: true, products }); // Changed success to boolean
+    return NextResponse.json({ success: true, products });
   } catch (error) {
-    return NextResponse.json({ success: false, error }); // Changed success to boolean
+    return NextResponse.json({ success: false, error });
   }
 }
 
@@ -81,12 +107,12 @@ export async function DELETE(req: NextRequest) {
     console.log(id);
     
     if (!id) {
-      return NextResponse.json({ success: false, msg: "id not found" }); // Changed success to boolean
+      return NextResponse.json({ success: false, msg: "id not found" });
     }
     
     await Product.findByIdAndDelete(id);
-    return NextResponse.json({ success: true, msg: "Item deleted" }); // Changed success to boolean
+    return NextResponse.json({ success: true, msg: "Item deleted" });
   } catch (error) {
-    return NextResponse.json({ success: false, error }); // Changed success to boolean
+    return NextResponse.json({ success: false, error });
   }
 }
