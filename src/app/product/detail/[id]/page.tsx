@@ -4,31 +4,29 @@ import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 
+// Define the API response type
 interface ApiResponse {
   products: IProduct[];
 }
 
-async function ProductDetail({ params }: { params: { id: string } }) { 
-  const { id } = params; // Extract pId from params
+// Define the props type for the page
+interface ProductDetailProps {
+  params: { id: string };
+}
+
+async function ProductDetail({ params }: ProductDetailProps) { 
+  const { id } = params; // Extract id from params
 
   try {
-    
-
     const res = await axios.get<ApiResponse>('http://localhost:3000/api/product/add', {
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-
     const products = res.data.products || [];
     
-  
-    const detail = products.find((prod) => {
-      const match = prod._id === id;
-     
-      return match;
-    });
+    const detail = products.find((prod) => prod._id === id);
 
     // Handle case where no product is found
     if (!detail) {
@@ -81,7 +79,6 @@ async function ProductDetail({ params }: { params: { id: string } }) {
         <div className="my-10">
           <h1 className="text-3xl font-semibold my-10">Error</h1>
           <p className="text-red-500">Failed to load product details</p>
-          
         </div>
       </Container>
     );
