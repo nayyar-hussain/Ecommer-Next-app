@@ -9,12 +9,8 @@ interface ApiResponse {
   products: IProduct[];
 }
 
-// Define the props type for the page
-interface ProductDetailProps {
-  params: { id: string };
-}
-
-async function ProductDetail({ params }: ProductDetailProps) { 
+// Note: No need to define a custom props type for App Router dynamic routes
+export default async function ProductDetail({ params }: { params: { id: string } }) {
   const { id } = params; // Extract id from params
 
   try {
@@ -84,5 +80,3 @@ async function ProductDetail({ params }: ProductDetailProps) {
     );
   }
 }
-
-export default ProductDetail;
